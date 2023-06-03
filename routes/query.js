@@ -11,7 +11,7 @@ router.post('/single',async(req,res)=>{
     }
     if(!queryType){
         if(!question){
-            res.status(400).json({message:'missing BOTH user query AND question'})
+            res.status(400).json({message:"missing BOTH 'queryType' AND 'question' in request body"})
         }
 
     }
@@ -30,8 +30,14 @@ router.post('/single',async(req,res)=>{
             gptPrompt+=singleQueryTypes[queryType]
         }
         else{
-            console.log('No/Invalid query type. Resolving to user question');
-            gptPrompt+=question
+            if(!question){
+                res.status(400).json({message:"Invalid 'queryType' value AND missing 'question'"})
+                return
+            }else{
+                console.log('No/Invalid query type. Resolving to user question');
+                gptPrompt+=question
+            }
+            
         }
         
         
