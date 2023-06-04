@@ -78,7 +78,7 @@ If "queryType" value is missing or invalid, the "question" string value is answe
 #### Valid queryType values
 1. `/query/single` - 'salary' , 'age' , 'personality' , 'summary' , ' career accomplishments ' , ' savings ' , ' draft email '
 
-2. `/query/multi` - ' compare ' ,  ' icebreakers ', ' approach '
+2. `/query/multi` - 'compare' ,  ' icebreakers ', 'approach'
 
 
 

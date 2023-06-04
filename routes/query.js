@@ -19,12 +19,13 @@ router.post('/single',async(req,res)=>{
 
     if(profile && (question || queryType)){
         let profileString=''
-
+        console.log(profile);
         Object.keys(profile).forEach(key=>{
             profileString+=`${key}:${profile[key]}\n\n`
         })
 
         let gptPrompt=profileString+'\nGiven the information above,'
+        console.log(gptPrompt);
 
         if(queryType && singleQueryTypes[queryType]){
             gptPrompt+=singleQueryTypes[queryType]
@@ -75,7 +76,7 @@ router.post('/multi',async(req,res)=>{
 
     if(profiles && (question || queryType)){
         let profileString=''
-
+        console.log(profiles);
         profiles.forEach(prof=>{
             Object.keys(prof).forEach(key=>{
                 profileString+=`${key}:${prof[key]}\n\n`
@@ -88,7 +89,9 @@ router.post('/multi',async(req,res)=>{
         
 
         if(queryType && multiQueryTypes[queryType]){
+            console.log(multiQueryTypes[queryType]);
             gptPrompt+=multiQueryTypes[queryType]
+            // console.log(gptPrompt);
         }
         else{
             console.log('missing/invalid query type. Resolving to user question');
