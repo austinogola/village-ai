@@ -5,7 +5,7 @@ const answerQuery=require('../utils/openai')
 let objectOrder=['Person','Headline','Work-Experience','Education','Skills','Volunteering']
 
 router.post('/single',async(req,res)=>{
-    let {profile,question,queryType}=req.body
+    let {profile,question,queryType,me}=req.body
 
     if(profile){
         if(typeof profile==='object'){
@@ -33,6 +33,14 @@ router.post('/single',async(req,res)=>{
                 Object.keys(profileCopy).forEach(key=>{
                     profileString+=`${key}:${profileCopy[key]}\n`
                 })
+
+                if(me){
+                   profileString+='\nMe:\n'
+                    Object.keys(me).forEach(key=>{
+                        profileString+=`${key}:${me[key]}\n`
+                    }) 
+                }
+                
         
                 let gptPrompt=profileString+'\nGiven the information above,'
 
@@ -49,7 +57,7 @@ router.post('/single',async(req,res)=>{
                     }
                     
                 }
-        
+
         
                 let answer=await answerQuery(gptPrompt)
         
@@ -76,7 +84,7 @@ router.post('/single',async(req,res)=>{
 })
 
 router.post('/multi',async(req,res)=>{
-    let {profiles,question,queryType}=req.body
+    let {profiles,question,queryType,me}=req.body
 
     if(profiles){
         if(Array.isArray(profiles)){
@@ -113,6 +121,13 @@ router.post('/multi',async(req,res)=>{
                     profileString+='\n\n'
                 })
 
+                if(me){
+                   profileString+='\nMe\n'
+                    Object.keys(me).forEach(key=>{
+                        profileString+=`${key}:${me[key]}\n`
+                    }) 
+                }
+
         
                 let gptPrompt=profileString+'\nGiven the information above,'
 
@@ -125,9 +140,9 @@ router.post('/multi',async(req,res)=>{
                     // console.log(gptPrompt);
                 }
                 else{
-                    console.log('missing/invalid query type. Resolving to user question');
                     gptPrompt+=question
                 }
+
 
                 
                 let answer=await answerQuery(gptPrompt)
@@ -163,7 +178,9 @@ const singleQueryTypes={
     'summary':"summarize this person's bio for a conference event into no more than 4 lines that explain their most recent role and the biggest accomplishments throughout their career. Start with a short catchy headline",
     'career accomplishments':'Summarize the major career jumps that this person did in their lives',
     'savings':"based on the average age at each position, location of each position, average cost of living & savings at each position, duration of each position, company growth during that period, and amount saved during each position, estimate the total savings they've kept throughout their career based on the job positions they've held",
-    'draft email':'draft a cold email I can use to initiate communication with this person'
+    'draft email':'draft a cold email I can use to initiate communication with this person',
+    'icebreakers':'what are some similarities or icebreakers that the second person could use to initiate communication with the first?',
+    'compare':'what are the differences in career path between these people?',
 }
 
 const multiQueryTypes={
