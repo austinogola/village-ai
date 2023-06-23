@@ -3,6 +3,62 @@ const answerQuery=require('../utils/openai')
 
 // 2.0
 let objectOrder=['Person','Headline','Work-Experience','Education','Skills','Volunteering']
+const numberToMonth = {
+  [1]: 'January',
+  [2]: 'February',
+  [3]: 'March',
+  [4]: 'April',
+  [5]: 'May',
+  [6]: 'June',
+  [7]: 'July',
+  [8]: 'August',
+  [9]: 'September',
+  [10]: 'October',
+  [11]: 'November',
+  [12]: 'December',
+}
+
+const stringEducation=(arr)=>{
+    let num=1
+    let educationString='Education History\n'
+    arr.forEach(educationObj=>{
+        let startDate=`${numberToMonth[educationObj.date_from.month]} ${educationObj.date_from.year}`
+        let endDate=`${numberToMonth[educationObj.date_to.month]} ${educationObj.date_to.year}`
+        educationString+=`${num}.${educationObj.field_of_study},${educationObj.major_program_certificate}-${educationObj.school_name}(${startDate}-${endDate}})\n`
+        educationString=educationString.replaceAll('undefined','')
+        num+=1
+    })
+    educationString+='\n'
+
+    return educationString
+}
+
+const stringJobs=(arr)=>{
+    let num=1
+    let jobString='Job History\n'
+    arr.forEach(jobObj=>{
+        let startDate=jobObj.date_from?`${numberToMonth[jobObj.date_from.month]} ${jobObj.date_from.year}`:''
+        let endDate=jobObj.date_to?`${numberToMonth[jobObj.date_to.month]} ${jobObj.date_to.year}`:null
+        jobString+=`${num}.${jobObj.position}-${jobObj.company_name}(${startDate}-${endDate}})\n`
+        jobString=jobString.replaceAll('undefined','')
+        num+=1
+    })
+    jobString+='\n'
+
+    return jobString
+}
+
+const stringSkills=(arr)=>{
+    let num=1
+    let skillString='Skills\n'
+    arr.forEach(skill=>{
+        skillString+=`${num}.${skill.name}\n`
+        num+=1
+    })
+    skillString+='\n'
+
+    return skillString
+}
 
 router.post('/single',async(req,res)=>{
     let {profile,question,queryType,me}=req.body
@@ -16,30 +72,35 @@ router.post('/single',async(req,res)=>{
         
             }
             if(profile && (question || queryType)){
-                let profileCopy=Object.create(profile)
-                let profileString=''
-                objectOrder.forEach(item=>{
-                    if(profileCopy[item]){
-                        if(item=='Work-Experience' || item=='Education' || item=='Skills' || item=='Volunteering'){
-                            profileString+=`${item}:\n${profileCopy[item]}\n`
-                        }
-                        else{
-                            profileString+=`${item}:${profileCopy[item]}\n`
-                        }
-                        
-                        delete profileCopy[item]
-                    }
-                })
-                Object.keys(profileCopy).forEach(key=>{
-                    profileString+=`${key}:${profileCopy[key]}\n`
-                })
+                let profileCopy={}
+                profileCopy['Education history']=profile.education_history
+                profileCopy['Job history']=profile.job_history
+                profileCopy['Certifications']=profile.certifications
+                profileCopy['Skills']=profile.skills
+                profileCopy['Headline']=profile.headline
+                profileCopy['Location']=profile.location?profile.location:profile.country
+                let profileString='1.\n'
+
+
+                profileString+=`Person:${profile.firstname} ${profile.lastname}\n\n`
+                profileString+=`Headline:${profileCopy['Headline']}\n\n`
+
+                profileString+=stringEducation(profileCopy['Education history'])
+                profileString+=stringJobs(profileCopy['Job history'])
+                profileString+=stringSkills(profileCopy['Skills'])
+                profileString+=`Location:${profileCopy['Location']}\n\n`
+
 
                 if(me){
-                   profileString+='\nMe:\n'
-                    Object.keys(me).forEach(key=>{
-                        profileString+=`${key}:${me[key]}\n`
-                    }) 
+                    profileString+='2.(Me)\n'
+                    profileString+=`Person:${me.firstname} ${me.lastname}\n\n`
+                    profileString+=`Headline:${me.headline}\n\n`
+                    profileString+=stringEducation(me.education_history)
+                    profileString+=stringJobs(me.job_history)
+                    profileString+=stringSkills(me.skills)
+                    profileString+=`Location:${me.location?me.location:me.country}\n\n`
                 }
+
                 
         
                 let gptPrompt=profileString+'\nGiven the information above,'
