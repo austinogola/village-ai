@@ -1,0 +1,38 @@
+{
+  "numberToMonth": {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  },
+  "singleQueryTypes": {
+    "salary": "make an estimate of the expected salary range of this person based on their most recent employer and the location of employment",
+    "age": "people usually begin higher education aged 17-19 . Also people can only be employed after they turn 18. Based on the years this person attended schoolor started employment. Make an estimate of their age",
+    "personality": "based on this person's career history and trajectory, what is their personality type?I know it’s hard to predict, but make an educated guess",
+    "summary": "summarize this person's bio for a conference event into no more than 4 lines that explain their most recent role and the biggest accomplishments throughout their career. Start with a short catchy headline",
+    "career accomplishments": "Summarize the major career jumps that this person did in their lives",
+    "savings": "based on the average age at each position, location of each position, average cost of living & savings at each position, duration of each position, company growth during that period, and amount saved during each position, estimate the total savings they've kept throughout their career based on the job positions they've held",
+    "draft email": "draft a cold email I can use to initiate communication with this person",
+    "icebreakers": "what are some similarities or icebreakers that the second person could use to initiate communication with the first?",
+    "compare": "what are the differences in career path between these people?"
+  },
+  "multiQueryTypes": {
+    "salary": "make an estimate of the expected salary range of this person based on their most recent employer and the location of employment",
+    "age": "people usually begin higher education aged 17-19 . Also people can only be employed after they turn 18. Based on the years this person attended schoolor started employment. Make an estimate of their age",
+    "personality": "based on this person's career history and trajectory, what is their personality type?I know it’s hard to predict, but make an educated guess",
+    "summary": "summarize this person's bio for a conference event into no more than 4 lines that explain their most recent role and the biggest accomplishments throughout their career. Start with a short catchy headline",
+    "career accomplishments": "Summarize the major career jumps that this person did in their lives",
+    "savings": "based on the average age at each position, location of each position, average cost of living & savings at each position, duration of each position, company growth during that period, and amount saved during each position, estimate the total savings they've kept throughout their career based on the job positions they've held",
+    "draft email": "draft a cold email I can use to initiate communication with this person",
+    "icebreakers": "what are some similarities or icebreakers that the second person could use to initiate communication with the first?",
+    "compare": "what are the differences in career path between these people?"
+  }
+}
